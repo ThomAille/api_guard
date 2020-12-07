@@ -25,17 +25,18 @@ module ApiGuard
         @resource_name = resource_name
 
         @token = request.headers['Authorization']&.split('Bearer ')&.last
-        return render_error(401, message: I18n.t('api_guard.access_token.missing')) unless @token
+
+        raise ApiGuard::Unauthorized, I18n.t('api_guard.access_token.missing') unless @token
 
         authenticate_token
 
         # Render error response only if no resource found and no previous render happened
-        render_error(401, message: I18n.t('api_guard.access_token.invalid')) if !current_resource && !performed?
+        raise Unauthorized, I18n.t('api_guard.access_token.invalid') if !current_resource && !performed?
       rescue JWT::DecodeError => e
         if e.message == 'Signature has expired'
-          render_error(401, message: I18n.t('api_guard.access_token.expired'))
+          raise ApiGuard::Unauthorized, I18n.t('api_guard.access_token.expired')
         else
-          render_error(401, message: I18n.t('api_guard.access_token.invalid'))
+          raise ApiGuard::Unauthorized, I18n.t('api_guard.access_token.invalid')
         end
       end
 
@@ -77,7 +78,7 @@ module ApiGuard
         if resource && valid_issued_at?(resource) && !blacklisted?(resource)
           define_current_resource_accessors(resource)
         else
-          render_error(401, message: I18n.t('api_guard.access_token.invalid'))
+          raise ApiGuard::Unauthorized, I18n.t('api_guard.access_token.invalid')
         end
       end
 

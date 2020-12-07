@@ -9,7 +9,7 @@ module Admins
         create_token_and_set_header(resource, resource_name)
         render_success(data: resource)
       else
-        render_error(401, message: 'Invalid admin credentials')
+        raise Unauthorized, 'Invalid admin credentials'
       end
     end
 
@@ -21,7 +21,7 @@ module Admins
 
     def find_resource
       self.resource = Admin.find_by(email: params[:email])
-      render_error(401, message: 'Invalid admin credentials') unless resource
+      raise Unauthorized, 'Invalid admin credentials' unless resource
     end
   end
 end

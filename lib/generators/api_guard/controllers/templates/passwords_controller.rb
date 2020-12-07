@@ -12,7 +12,7 @@ module <%= @controller_scope %>
     #     create_token_and_set_header(current_resource, resource_name)
     #     render_success(message: I18n.t('api_guard.password.changed'))
     #   else
-    #     render_error(422, object: current_resource)
+    #     raise UnprocessableEntity, current_resource.errors.full_messages[0]
     #   end
     # end
 

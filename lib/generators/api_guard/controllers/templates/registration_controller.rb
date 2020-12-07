@@ -8,7 +8,7 @@ module <%= @controller_scope %>
     #     create_token_and_set_header(resource, resource_name)
     #     render_success(message: I18n.t('api_guard.registration.signed_up'))
     #   else
-    #     render_error(422, object: resource)
+    #     raise UnprocessableEntity, resource.errors.full_messages[0]
     #   end
     # end
 

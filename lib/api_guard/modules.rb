@@ -7,6 +7,8 @@ require 'api_guard/jwt_auth/refresh_jwt_token'
 require 'api_guard/jwt_auth/blacklist_token'
 require 'api_guard/response_formatters/renderer'
 require 'api_guard/models/concerns'
+require 'api_guard/error'
+require 'api_guard/errorHandler'
 
 module ApiGuard
   module Modules
